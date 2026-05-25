@@ -76,3 +76,13 @@
 状态更新：{有/无}
 回流候选：{通用模式 / 无}
 ```
+
+---
+
+## Issue 协议
+
+**Label**：`O04-engineering`
+**激活时读**：`gh issue list --label O04-engineering --state open`
+**创建条件**：代码任务确认（bug fix / 新功能 / 重构 / 配置变更），需要 Cursor 执行
+**标题格式**：`[O04] {代码任务描述}`
+**Cursor接单**：✅（工程任务优先派发 Cursor，按 token 经济原则）

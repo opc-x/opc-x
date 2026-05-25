@@ -86,3 +86,14 @@ O10 反馈输出
 ---
 状态更新：project-state.md 已更新至第{N}圈
 ```
+
+---
+
+## Issue 协议
+
+**Label**：`O10-meta`
+**激活时读**：`gh issue list --label O10-meta --state open`
+**创建条件**：系统审计发现的改进项，或螺旋推进时发现的跨圈系统性问题
+**标题格式**：`[O10] {系统改进描述}`
+**Cursor接单**：❌（系统迭代由 Claude 处理；strategy-board.md 更新除外可派）
+**特权**：O10 还负责维护 `.opc/strategy-board.md`，每轮复盘后更新各部门信号灯

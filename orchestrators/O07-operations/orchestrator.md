@@ -72,3 +72,13 @@
 状态更新：{有/无}
 回流候选：{通用模式 / 无}
 ```
+
+---
+
+## Issue 协议
+
+**Label**：`O07-operations`
+**激活时读**：`gh issue list --label O07-operations --state open`
+**创建条件**：流程 / SOP / 自动化任务确认，需要落地执行或追踪工具配置
+**标题格式**：`[O07] {流程/工具任务描述}`
+**Cursor接单**：❌（运营流程由 Claude 处理）

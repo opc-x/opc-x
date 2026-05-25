@@ -55,10 +55,12 @@ orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
 ## OPC-X 集团能力（远程实时同步）
 @https://raw.githubusercontent.com/opc-x/opc-x/main/AGENT.md
 @.opc/context.md
+@.opc/strategy-board.md
 
 ## 执行契约
-- 任务开始前：读 `.opc/project-state.md`
+- 任务开始前：读 `.opc/project-state.md` + `.opc/strategy-board.md`
 - 任务结束后：判断是否更新 `.opc/project-state.md`
+- 重大决策后：更新 `.opc/strategy-board.md` 决策历史
 ```
 
 **已存在** → 检查顶部有没有 `@https://raw.githubusercontent.com/opc-x/opc-x/main/AGENT.md`，没有则插入到文件最顶部。
@@ -85,6 +87,75 @@ orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
 
 ## 当前阶段
 [MVP / PMF验证 / 增长 / 规模化]
+```
+
+---
+
+## Step 2.5 — .opc/strategy-board.md
+
+不存在则创建（已存在跳过）。读取 context.md 中的产品描述和当前阶段，填入对应字段：
+
+```
+# {PROJECT} 战略作战室
+
+> O10 元认知 owns 此文件维护权。每轮螺旋复盘后更新。
+
+---
+
+## 北极星
+
+[从 context.md 当前阶段推断，或留空待填]
+
+---
+
+## 螺旋位置
+
+**当前圈**：第 1 圈
+**阶段**：决策 ⬅ 当前在这里
+**本圈核心目标**：[待填]
+
+---
+
+## 各部门信号灯
+
+| 部门 | 状态 | Open Issues | 当前焦点 | 阻断 |
+|------|------|------------|---------|------|
+| O01 战略 | 🟢 | 0 | 初始化 | — |
+| O02 调研 | 🟢 | 0 | — | — |
+| O03 产品 | 🟢 | 0 | — | — |
+| O04 工程 | 🟢 | 0 | — | — |
+| O05 内容 | 🟢 | 0 | — | — |
+| O06 营销 | 🟢 | 0 | — | — |
+| O07 运营 | 🟢 | 0 | — | — |
+| O08 数据 | 🟢 | 0 | — | — |
+| O09 财务 | 🟢 | 0 | — | — |
+| O10 元认知 | 🟢 | 0 | — | — |
+
+---
+
+## 跨部门阻断关系
+
+暂无。
+
+---
+
+## 当前战略决策待办
+
+| 优先级 | 决策问题 | 所需信息 | 负责部门 |
+|--------|---------|---------|---------|
+| P0 | 本圈核心目标确认 | — | O01 |
+
+---
+
+## 决策历史
+
+| 日期 | 决策 | 依据 | 影响 |
+|------|------|------|------|
+| {TODAY} | 项目初始化，进入第1圈 | — | 全部门 |
+
+---
+
+*更新规则：每轮 O10 复盘后刷新信号灯 + 追加决策记录。*
 ```
 
 ---
@@ -211,6 +282,32 @@ opc-x/orchestrators/O0X-{name}/
 
 ---
 
+## Step 5.5 — GitHub Labels（O01-O10 部门标签）
+
+检查当前目录是否有 `.git` + GitHub remote：
+```bash
+git remote get-url origin 2>/dev/null
+```
+
+如果有 GitHub remote，批量创建 10 个部门标签（已存在的跳过，不报错）：
+
+```bash
+gh label create "O01-strategy"    --color "0052CC" --description "战略部任务队列" --force
+gh label create "O02-research"    --color "5319E7" --description "调研部任务队列" --force
+gh label create "O03-product"     --color "006B75" --description "产品部任务队列" --force
+gh label create "O04-engineering" --color "E4E669" --description "工程部任务队列（Cursor接单）" --force
+gh label create "O05-content"     --color "EE9900" --description "内容部任务队列" --force
+gh label create "O06-marketing"   --color "E99695" --description "营销部任务队列" --force
+gh label create "O07-operations"  --color "BFD4F2" --description "运营部任务队列" --force
+gh label create "O08-data"        --color "D93F0B" --description "数据部任务队列（SQL类Cursor接单）" --force
+gh label create "O09-finance"     --color "0E8A16" --description "财务部任务队列" --force
+gh label create "O10-meta"        --color "CCCCCC" --description "元认知任务队列（strategy-board维护）" --force
+```
+
+如果没有 GitHub remote，跳过此步，提示用户后续手动执行或在连接 GitHub 后运行。
+
+---
+
 ## Step 6 — .claude/commands/{PROJECT}.md
 
 ```
@@ -261,18 +358,21 @@ $ARGUMENTS
 ✅ {PROJECT} 子公司初始化完成
 
 已创建：
-  CLAUDE.md                              集团能力导入
+  CLAUDE.md                              集团能力导入 + strategy-board 挂载
   .opc/context.md                        填写领域知识
-  .opc/project-state.md                  填写 Vision
+  .opc/project-state.md                  填写 Vision + 螺旋状态
+  .opc/strategy-board.md                 战略作战室（上帝视角，O10 维护）
   .opc/orchestrators/O01~O10/            镜像集团部门（扩展点1：专项技能）
   .opc/outputs/templates/O01~O10/        镜像集团输出模板（扩展点2：输出格式）
   .claude/commands/{PROJECT}.md          /{PROJECT} 命令可用
+  GitHub Labels O01~O10                  部门任务队列标签（有 remote 时自动创建）
 
 扩展方式：
   专项技能   → .opc/orchestrators/O0X-*/skills/ 新建文件
   覆盖输出   → .opc/outputs/templates/O0X-{dept}.md 编辑
 
 用法：
-  /{PROJECT} <任务>       触发全套子公司能力
-  /{PROJECT} 回流检查     识别可推回 opc-x 的通用模式
+  /{PROJECT} <任务>         触发全套子公司能力
+  /{PROJECT} 回流检查       识别可推回 opc-x 的通用模式
+  gh issue list --label O04-engineering  查看工程部待办队列
 ```

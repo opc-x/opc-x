@@ -78,3 +78,13 @@
 状态更新：{有/无}
 回流候选：{通用模式 / 无}
 ```
+
+---
+
+## Issue 协议
+
+**Label**：`O08-data`
+**激活时读**：`gh issue list --label O08-data --state open`
+**创建条件**：数据分析任务确认，或埋点 / SQL 查询实现需要 Cursor 执行
+**标题格式**：`[O08] {数据任务描述}`
+**Cursor接单**：⚠️（SQL 实现 / 埋点代码 / 数据脚本可派 Cursor；分析洞察由 Claude 处理）

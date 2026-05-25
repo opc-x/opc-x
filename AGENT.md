@@ -44,7 +44,9 @@ OPC-X 同时承载两层语义，两种说法指向同一个东西：
 | 一轮工作 | 螺旋一圈 | 决策→需求→执行→验收→反馈 |
 | 靶心 / 目标 | Vision | `project-state.md` 里的终极目标 |
 | 项目进度 | `project-state.md` | 螺旋记忆，每轮任务前读、后写 |
-| CEO 办公室 | O10 · 元认知 | 复盘 / 审计 / 系统迭代 |
+| 全局战略仪表盘 | `strategy-board.md` | 跨部门综合视图，上帝视角，O10 维护 |
+| 部门任务队列 | GitHub Issues + O0X Label | 每个部门的持久化工作记忆 |
+| CEO 办公室 | O10 · 元认知 | 复盘 / 审计 / 系统迭代 / strategy-board 维护 |
 | 招聘 | 新建技能文件 | 按需增加岗位能力 |
 | 离职 | 删除技能文件 | 淘汰过时岗位 |
 | 调岗 | 技能回流 | 专项技能 → 元项目，需人确认 |
@@ -354,4 +356,76 @@ your-project/
 
 ---
 
-*OPC-X v2.3 · 两扩展点 · 集团能力通用 · 子公司状态独立 · 终身复用。*
+---
+
+## GitHub Issue 协议（部门任务队列）
+
+每个部门在项目 GitHub repo 拥有同名标签，Issues = 该部门的持久化任务队列。
+
+### 标准 Label（10 个，init.sh 自动创建）
+
+| Label | 颜色 | 部门 | Cursor接单 |
+|---|---|---|---|
+| `O01-strategy` | `#0052CC` | 战略 | ❌ |
+| `O02-research` | `#5319E7` | 调研 | ❌ |
+| `O03-product` | `#006B75` | 产品 | ❌ |
+| `O04-engineering` | `#E4E669` | 工程 | ✅ |
+| `O05-content` | `#EE9900` | 内容 | ⚠️ 文档类可派 |
+| `O06-marketing` | `#E99695` | 营销 | ❌ |
+| `O07-operations` | `#BFD4F2` | 运营 | ❌ |
+| `O08-data` | `#D93F0B` | 数据 | ⚠️ SQL类可派 |
+| `O09-finance` | `#0E8A16` | 财务 | ❌ |
+| `O10-meta` | `#CCCCCC` | 元认知 | ❌ |
+
+### 核心规则
+
+**读：永远自动**（orchestrator 激活时执行，无副作用）
+```bash
+gh issue list --label {O0X-name} --state open
+```
+
+**写：仅当有明确 action item**（不在每次激活时自动创建 issue）
+```bash
+gh issue create --label {O0X-name} [--label child-issue|master-issue] \
+  --title "[O0X] {描述}" --body "{内容}"
+```
+
+**安全阀**：人是唯一触发源，orchestrator 不自我触发，不跨部门自动创建 issue。
+
+### 双标签策略（归属 + 级别同时打）
+
+```
+[child-issue][O04-engineering]   代码任务
+[master-issue][O01-strategy]     战略编排主任务
+[research-issue][O02-research]   调研任务
+[solo][O06-marketing]            独立营销任务
+```
+
+### Issue 生命周期
+
+```
+O0X 产生 action item
+  → gh issue create (open)
+  → /cursor 派发（O04/O05/O08 可代码化任务）
+  → Cursor 执行 + gh issue close
+  → O0X 下次激活读 closed issues → 更新 strategy-board.md 信号灯
+```
+
+---
+
+## strategy-board.md（战略作战室）
+
+每个子公司 `.opc/strategy-board.md`：上帝视角的跨部门综合仪表盘。
+
+**包含**：北极星 / 螺旋位置 / 各部门信号灯 / 跨部门阻断关系 / 决策待办 / 决策历史
+
+**维护规则**：
+- O10 每轮复盘后更新信号灯 + 追加决策记录
+- 任意 orchestrator 产出重大决策时写入决策历史
+- `/talkflow`（或对应专项命令）激活时自动读取
+
+**模板位置**：`opc-x/outputs/templates/strategy-board.md`
+
+---
+
+*OPC-X v2.4 · 两扩展点 + Issue队列 + 战略作战室 · 集团能力通用 · 子公司状态独立 · 终身复用。*

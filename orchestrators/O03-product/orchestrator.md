@@ -75,3 +75,13 @@ AB测试结论 → 反馈分类 → Changelog更新
 状态更新：{有/无}
 回流候选：{通用模式 / 无}
 ```
+
+---
+
+## Issue 协议
+
+**Label**：`O03-product`
+**激活时读**：`gh issue list --label O03-product --state open`
+**创建条件**：PRD 完成或功能范围确认，需要追踪产品需求落地进度
+**标题格式**：`[O03] {功能/需求描述}`
+**Cursor接单**：❌（需求文档由 Claude 处理，代码实现转 O04）
