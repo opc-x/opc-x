@@ -68,13 +68,59 @@ graph TB
 
 ---
 
-## 反哺协议（专项 → 元项目，闭环）
+## 视角一：组织架构
+
+> 回答「这个公司有什么、谁干什么」。方便人理解和调用。
+
+### 层级结构
+
+```mermaid
+graph TB
+    RHYTHM["⟳ 全局运营节律 · 螺旋协议\n决策→需求→执行→验收→反馈→+1圈\n凌驾于所有部门之上，不属于任何单一部门"]
+
+    subgraph COMPANY["🏢 OPC-X 集团"]
+        subgraph DEPTS["10 部门（Orchestrators）"]
+            direction LR
+            O01["O01\n战略"] --- O02["O02\n调研"] --- O03["O03\n产品"] --- O04["O04\n工程"] --- O05["O05\n内容"]
+            O06["O06\n营销"] --- O07["O07\n运营"] --- O08["O08\n数据"] --- O09["O09\n财务"] --- O10["O10\n元认知"]
+        end
+        SKILLS["🧑 岗位 · Skills（动态员工）\n100+ 原子技能文件 · 可增 / 删 / 迁 / 升"]
+        DEPTS --> SKILLS
+    end
+
+    RHYTHM -->|"协调各部门按节律运转"| DEPTS
+```
+
+| 层 | 公司类比 | 实现 | 特性 |
+|---|---|---|---|
+| 运营节律 | 公司运作节奏 | 螺旋协议 | 全局，静态规则 |
+| 部门 | 10 个职能域 | Orchestrators | 静态结构 |
+| 员工 | 原子执行岗位 | Skills (.md) | **动态流动** |
+
+**员工（Skills）流动规则**：
+
+| 动作 | 操作 |
+|---|---|
+| 招聘 | 按需新建技能文件 |
+| 离职 | 删除过时技能 |
+| 调岗（回流） | 专项技能 → 元项目，需人确认 |
+| 升职 | prompt 迭代优化 |
+
+### 全局运营节律（螺旋协议）
+
+> 公司级别的执行节奏，不是任何一个部门的功能。O10 元认知负责「反馈」这一步，让 +1圈 能发生，但螺旋本身属于全公司。
+
+<img src="docs/spiral.svg" alt="OPC-X 螺旋执行协议" width="500"/>
+
+> 三环同构：决策(O01)→需求(O03)→执行(O04-07)→验收(O08)→反馈(O10)，每圈 +1 层，螺旋上升至靶心。
+
+### 反哺协议（技能回流）
 
 ```mermaid
 graph LR
     META["🏢 元项目\nOPC-X"]
     SUB["📦 专项\n.opc/"]
-    O10["O10 Meta\n审计 + 提炼"]
+    O10["O10 元认知\n审计 + 提炼"]
 
     META -->|"赋能：通用技能"| SUB
     SUB -->|"执行中发现改进"| O10
@@ -82,73 +128,33 @@ graph LR
     O10 -->|"专项特有 → 留在 .opc/"| SUB
 ```
 
-**回流类型判断**：
-
 | 改进类型 | 判断标准 | 动作 |
 |---|---|---|
 | 通用模式 | 其他专项也能用 | 更新 `opc-x/orchestrators/` 对应技能 |
 | 专项特有 | 只有这个领域用 | 留在 `.opc/skills/`，不回流 |
 
-**触发路径**：专项执行 → `/opc-audit` 识别候选 → **你确认** → 更新元项目技能文件
-
-**规则**：元项目只接受通用化的改进，不接受项目特有逻辑。最终由人拍板。
+触发路径：专项执行 → `/opc-audit` 识别候选 → **你确认** → 更新元项目技能文件
 
 ---
 
-## 架构总览
+## 视角二：工程执行
 
-```mermaid
-graph TB
-    subgraph GROUP["🏢 OPC-X 集团"]
-        AGENT["📜 AGENT.md — 集团宪法"]
-        subgraph ORCS["10 Orchestrators · 100 Skills"]
-            direction LR
-            O01["O01\nStrategy"] --- O02["O02\nResearch"] --- O03["O03\nProduct"] --- O04["O04\nEngineering"] --- O05["O05\nContent"]
-            O06["O06\nMarketing"] --- O07["O07\nOperations"] --- O08["O08\nData"] --- O09["O09\nFinance"] --- O10["O10\nMeta 🔄"]
-        end
-        SHARED["shared/contexts/ — 集团知识库"]
-        STATE["project-state.md — 运行时状态（各子公司独立）"]
-    end
+> 回答「Agent 怎么跑、状态怎么传、一次任务的完整流程」。方便人机协同。
 
-    subgraph SUB_A["📦 子公司 TalkFlow"]
-        TF[".opc/ 专项技能包\nproject-state.md"]
-    end
-    subgraph SUB_B["📦 子公司 N"]
-        SN[".opc/ 专项技能包\nproject-state.md"]
-    end
-    subgraph SUB_NEW["📦 子公司 ..."]
-        direction LR
-        SCRIPT["new-subsidiary.sh\n一键生成"]
-    end
-
-    TF -->|"@AGENT.md 引入集团能力"| GROUP
-    SN -->|"@AGENT.md 引入集团能力"| GROUP
-    SCRIPT -->|"从集团 clone"| GROUP
-    O10 -->|"Loop Controller"| O01
-```
-
----
-
-## 螺旋执行协议
-
-<img src="docs/spiral.svg" alt="OPC-X 螺旋执行协议" width="500"/>
-
-> 三环同构：决策(O01)→需求(O03)→执行(O04-07)→验收(O08)→反馈(O10)，每圈 +1 层，螺旋上升至靶心。
-
----
-
-## 单次任务执行契约
+### 单次任务执行契约
 
 ```mermaid
 flowchart LR
-    IN([用户输入]) --> R[读\nproject-state.md]
-    R --> ROUTE{路由\n意图匹配}
-    ROUTE --> ORC[执行\nOrchestrator+Skill]
-    ORC --> OUT[输出\n交付物]
-    OUT --> UPD{更新\n状态?}
-    UPD -->|是| W[写\nproject-state.md]
-    UPD -->|否| END([完成])
-    W --> END
+    IN([用户输入]) --> RS[读\nproject-state.md]
+    RS --> RT{路由\n意图匹配}
+    RT --> LOAD[加载\nOrchestrator+Skill]
+    LOAD --> EXEC[Agent Loop\nperceive→think→act→observe]
+    EXEC --> OUT[输出\n交付物]
+    OUT --> UPD{状态\n有变化?}
+    UPD -->|是| WS[写\nproject-state.md]
+    UPD -->|否| DONE([完成])
+    WS --> DONE
+    DONE -.->|"反馈→+1圈 / 命中靶心"| RS
 ```
 
 输出格式：
@@ -160,65 +166,60 @@ flowchart LR
 💡 下一步：{推荐关联技能}
 ```
 
----
-
-## 微观层（agent-loop，所有 agent 内置，无需定义）
-
+**微观层（agent-loop，所有 agent 内置，无需定义）**：
 ```
 perceive → think → act → observe → loop
 OPC-X 螺旋运行在它之上，不干涉它。
 ```
 
----
+### 路由表
 
-## 路由表
-
-### O01 · Strategy
+#### O01 · Strategy · 战略部
 触发：目标 / OKR / 战略 / 规划 / 转型 / 竞争 / 商业模式 / 市场
 `S01`目标设定 · `S02`优先级矩阵 · `S03`市场规模 · `S04`商业模式 · `S05`转型决策
 `S06`风险评估 · `S07`资源分配 · `S08`OKR设计 · `S09`竞争定位 · `S10`扩张退出
 
-### O02 · Research
+#### O02 · Research · 调研部
 触发：调研 / 竞品 / 用户洞察 / 趋势 / 问卷 / 数据来源
 `S01`竞品分析 · `S02`用户访谈 · `S03`趋势扫描 · `S04`文献综述 · `S05`问卷设计
 `S06`数据来源 · `S07`洞察合成 · `S08`用户画像 · `S09`JTBD分析 · `S10`行业标杆
 
-### O03 · Product
+#### O03 · Product · 产品部
 触发：PRD / 需求 / 功能 / 路线图 / MVP / 用户故事 / 验收
 `S01`PRD撰写 · `S02`功能范围 · `S03`路线图 · `S04`用户故事 · `S05`线框图规格
 `S06`验收标准 · `S07`AB测试 · `S08`MVP定义 · `S09`Changelog · `S10`反馈分类
 
-### O04 · Engineering
+#### O04 · Engineering · 工程部
 触发：代码 / 架构 / bug / 重构 / API / 安全 / 性能 / CI/CD
 `S01`代码评审 · `S02`架构设计 · `S03`调试诊断 · `S04`重构规划 · `S05`API设计
 `S06`测试策略 · `S07`性能审计 · `S08`安全审查 · `S09`DevOps配置 · `S10`技术债
 
-### O05 · Content
+#### O05 · Content · 内容部
 触发：文章 / 文案 / 文档 / 社交 / 邮件 / 脚本 / SEO / newsletter
 `S01`博客文章 · `S02`营销文案 · `S03`技术文档 · `S04`社交媒体 · `S05`邮件序列
 `S06`视频脚本 · `S07`SEO优化 · `S08`标题测试 · `S09`案例研究 · `S10`订阅通讯
 
-### O06 · Marketing
+#### O06 · Marketing · 营销部
 触发：营销 / 渠道 / 活动 / 增长 / 广告 / 发布 / 裂变 / 留存
 `S01`渠道筛选 · `S02`活动策划 · `S03`落地页优化 · `S04`增长实验 · `S05`裂变设计
 `S06`广告创意 · `S07`漏斗分析 · `S08`留存策略 · `S09`合作开发 · `S10`产品发布
 
-### O07 · Operations
+#### O07 · Operations · 运营部
 触发：SOP / 流程 / 工具 / 自动化 / 客服 / 日程 / 供应商
 `S01`SOP撰写 · `S02`工具选型 · `S03`自动化设计 · `S04`工作流梳理 · `S05`供应商管理
 `S06`客服流程 · `S07`用户引导 · `S08`日程规划 · `S09`会议协调 · `S10`故障响应
 
-### O08 · Data
+#### O08 · Data · 数据部
 触发：数据 / 指标 / SQL / 分析 / 报告 / 埋点 / 看板
 `S01`指标定义 · `S02`仪表盘设计 · `S03`SQL查询 · `S04`队列分析 · `S05`报告撰写
 `S06`数据清洗 · `S07`数据可视化 · `S08`异常检测 · `S09`预测建模 · `S10`埋点设计
 
-### O09 · Finance
+#### O09 · Finance · 财务部
 触发：定价 / 收入 / 财务 / 现金流 / 合同 / 融资 / CAC / LTV
 `S01`定价策略 · `S02`收入预测 · `S03`支出追踪 · `S04`发票生成 · `S05`税务规划
 `S06`单位经济学 · `S07`现金流 · `S08`融资材料 · `S09`财务模型 · `S10`合同审查
 
-### O10 · Meta — Loop Controller
+#### O10 · Meta · 元认知
 触发：复盘 / 学习 / 习惯 / 审计 / 决策 / 精力 / 系统迭代
 `S01`周复盘 · `S02`技能差距 · `S03`学习计划 · `S04`系统审计 · `S05`习惯设计
 `S06`知识沉淀 · `S07`精力管理 · `S08`决策日志 · `S09`失败分析 · `S10`愿景迭代
@@ -234,11 +235,11 @@ OPC-X 螺旋运行在它之上，不干涉它。
 project/
 ├── CLAUDE.md          ← @OPC-X/AGENT.md + @.opc/context.md
 ├── .opc/
-│   ├── context.md     ← 该项目的领域知识
+│   ├── context.md        ← 该项目的领域知识
 │   ├── project-state.md  ← 该项目的螺旋状态
-│   └── skills/        ← 项目专项技能（覆盖/扩展集团技能）
+│   └── skills/           ← 项目专项技能（覆盖/扩展集团技能）
 ```
 
 ---
 
-*OPC-X v2.0 · 集团能力通用，子公司状态独立，终身复用。*
+*OPC-X v2.1 · 两视角分离 · 集团能力通用 · 子公司状态独立 · 终身复用。*
