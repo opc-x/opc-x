@@ -466,19 +466,42 @@ O0X 产生 action item
 
 ---
 
-## strategy-board.md（战略作战室）
+## strategy-board.md（战术板）
 
-每个子公司 `.opc/strategy-board.md`：上帝视角的跨部门综合仪表盘。
+每个子公司 `.opc/strategy-board.md`：指挥官唯一的输入输出界面。
 
-**包含**：北极星 / 螺旋位置 / 各部门信号灯 / 跨部门阻断关系 / 决策待办 / 决策历史
+**结构**：战略目标 / 当前战略 / 核心域架构 / 作战命令 / 战略结果
 
 **维护规则**：
-- O10 每轮复盘后更新信号灯 + 追加决策记录
-- 任意 orchestrator 产出重大决策时写入决策历史
-- `/talkflow`（或对应专项命令）激活时自动读取
+- 指挥官写：战略目标 / 当前战略 / 作战命令
+- 系统写回：战略结果（命令完成后，参与部门汇总战略层面结论）
+- `/talkflow` 激活时自动读取
 
 **模板位置**：`opc-x/outputs/templates/strategy-board.md`
 
+### GitHub Issue 镜像规则
+
+战术板同步到 GitHub Issue，利用 GitHub 原生渲染 Mermaid 图表。
+
+**Label**：`strategy-board`（每个项目唯一，固定不变）
+**Issue**：每个项目只有一个，标题固定为 `🗺️ {PROJECT} 战术板`
+**同步时机**：
+- 战术板有任何内容变更后同步
+- 作战命令新增 / 状态变更后同步
+- 战略结果写回后同步
+
+**同步命令**：
+```bash
+# 首次创建
+gh issue create --label strategy-board \
+  --title "🗺️ {PROJECT} 战术板" \
+  --body "$(cat .opc/strategy-board.md)"
+
+# 后续更新（先查 issue number，再编辑）
+BOARD_ISSUE=$(gh issue list --label strategy-board --json number --jq '.[0].number')
+gh issue edit $BOARD_ISSUE --body "$(cat .opc/strategy-board.md)"
+```
+
 ---
 
-*OPC-X v2.4 · 两扩展点 + Issue队列 + 战略作战室 · 集团能力通用 · 子公司状态独立 · 终身复用。*
+*OPC-X v2.6 · 两扩展点 + Issue队列 + 战术板 + GitHub镜像 · 集团能力通用 · 子公司状态独立 · 终身复用。*

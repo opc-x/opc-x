@@ -302,6 +302,14 @@ gh label create "O07-operations"  --color "BFD4F2" --description "运营部任�
 gh label create "O08-data"        --color "D93F0B" --description "数据部任务队列（SQL类Cursor接单）" --force
 gh label create "O09-finance"     --color "0E8A16" --description "财务部任务队列" --force
 gh label create "O10-meta"        --color "CCCCCC" --description "元认知任务队列（strategy-board维护）" --force
+gh label create "strategy-board"  --color "0075CA" --description "战术板 - 指挥官作战面板（每项目唯一）" --force
+```
+
+创建战术板 GitHub Issue（每项目唯一，Mermaid 渲染用）：
+```bash
+gh issue create --label strategy-board \
+  --title "🗺️ {PROJECT} 战术板" \
+  --body "$(cat .opc/strategy-board.md)"
 ```
 
 如果没有 GitHub remote，跳过此步，提示用户后续手动执行或在连接 GitHub 后运行。
