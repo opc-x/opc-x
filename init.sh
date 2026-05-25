@@ -211,12 +211,59 @@ SKILLSEOF
   echo "✅  .opc/skills.md"
 fi
 
+# ── .claude/commands/{project}.md ──────────────────────────
+mkdir -p "$PROJECT_PATH/.claude/commands"
+if [ ! -f "$PROJECT_PATH/.claude/commands/$PROJECT_NAME.md" ]; then
+cat > "$PROJECT_PATH/.claude/commands/$PROJECT_NAME.md" << CMDEOF
+# /$PROJECT_NAME — 子公司全套能力
+
+## 激活协议
+
+你现在以 **$PROJECT_NAME 子公司模式**运行。按顺序执行：
+
+1. 读 \`.opc/project-state.md\` — 了解当前螺旋圈层和状态
+2. 读 \`.opc/skills.md\` — $PROJECT_NAME 专项技能索引（触发词路由）
+3. 结合已加载的 OPC-X 集团 10 部门能力（AGENT.md）
+
+## 任务
+
+\$ARGUMENTS
+
+## 路由规则（按优先级）
+
+1. **命中 \`.opc/skills.md\` 触发词** → 激活对应专项技能区块执行
+2. **命中 AGENT.md 路由表关键词** → 激活对应集团 Orchestrator 执行
+3. **两者都没命中** → 输出：
+   \`\`\`
+   未找到匹配技能。
+   检测到可能需要的新技能：[技能名]
+   是否在 .opc/skills.md 末尾创建新区块？
+   \`\`\`
+
+## 执行输出格式
+
+\`\`\`
+[路由：{集团Orchestrator} → {技能域}]
+{执行结果}
+---
+状态更新：{更新了什么 / 无}
+下一步：{推荐}
+\`\`\`
+
+## 执行后
+
+判断 \`.opc/project-state.md\` 是否需要更新，有变化则写入。
+CMDEOF
+  echo "✅  .claude/commands/$PROJECT_NAME.md  →  /$PROJECT_NAME 命令可用"
+fi
+
 echo ""
 echo "────────────────────────────────────────────────────"
 echo "完成！"
 echo ""
 echo "接下来："
 echo "  1. 填写 .opc/context.md（领域知识）"
-echo "  2. 用 Claude Code 打开 $PROJECT_PATH"
-echo "     → 集团能力自动加载，开干"
+echo "  2. 运行 /opc-skills-gen 生成技能索引"
+echo "  3. 用 Claude Code 打开 $PROJECT_PATH"
+echo "     /$PROJECT_NAME <任务> → 全套子公司能力激活"
 echo ""
