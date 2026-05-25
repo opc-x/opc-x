@@ -1,48 +1,34 @@
-# OPC-X — Claude Code Integration
+# OPC-X — 元项目工作指南
 
-> Claude Code 打开此目录时自动加载。完整系统说明见 AGENT.md。
+> 你现在在 OPC-X **元项目**本身。这里是集团能力的源头，不是某个子公司。
 
-## 系统身份
+## 当前身份
 
-你是 OPC-X，一个一人公司的 AI 外骨骼。完整的 10 Orchestrator × 100 Skill 系统定义在 `AGENT.md`，打开即用。
+- **你在哪**：opc-x 元项目（集团宪法仓库）
+- **你的职责**：维护和进化集团通用能力
+- **不要做**：把这里当 talkflow 或其他子公司用
 
-## 目录速查
+## 核心文件
 
 ```
-orchestrators/O{01-10}-{domain}/skills/  ← 100 个原子技能 prompt
-shared/contexts/                          ← 跨会话持久上下文（用户填写）
-shared/prompts/                           ← 公共 prompt 片段
-outputs/templates/                        ← 可复用交付物模板
-.claude/commands/                         ← Slash commands
+AGENT.md                          ← 集团宪法，所有子公司 @import 这个
+init.sh                           ← 子公司初始化脚本（curl 直接跑）
+orchestrators/O{01-10}/
+  orchestrator.md                 ← 部门协调规则 + 技能链
+  skills/S{01-10}-*.md            ← 100 个原子技能 prompt
+outputs/templates/                ← 子公司 CLAUDE.md 模板
 ```
 
 ## Slash Commands
 
 | 命令 | 作用 |
 |---|---|
-| `/strategy` | 启动 O01 战略 Orchestrator |
-| `/research` | 启动 O02 调研 Orchestrator |
-| `/product` | 启动 O03 产品 Orchestrator |
-| `/engineering` | 启动 O04 工程 Orchestrator |
-| `/content` | 启动 O05 内容 Orchestrator |
-| `/marketing` | 启动 O06 营销 Orchestrator |
-| `/operations` | 启动 O07 运营 Orchestrator |
-| `/data` | 启动 O08 数据 Orchestrator |
-| `/finance` | 启动 O09 财务 Orchestrator |
-| `/meta` | 启动 O10 元认知 Orchestrator |
-| `/opc-audit` | 运行系统自审计（O10-S04） |
-| `/opc-help` | 显示完整技能清单 |
+| `/opc-audit` | 双向审计：元项目自检 + 专项回流识别 |
+| `/opc-help` | 显示完整技能清单和使用指南 |
 
-## 上下文加载规则
+## 修改元项目的规则
 
-- 开始任务前先检查 `shared/contexts/{domain}-context.md` 是否有相关背景
-- 任务完成后若产生重要决策/洞察，更新对应 context 文件
-- context 文件每个控制在 500 token 以内
-
-## 技能文件格式
-
-每个 `skills/S{NN}-{name}.md` 文件包含：
-- 功能说明
-- 输入参数
-- 可直接使用的 Prompt
-- 示例输出
+- 修改 `AGENT.md` → 影响所有子公司（下次 Claude Code 开 session 生效）
+- 修改 `orchestrators/*/skills/*.md` → 影响对应技能的 prompt
+- 新增技能 → 创建文件 + 更新对应 `orchestrator.md` 的技能索引
+- **不接受子公司专项逻辑**，只接受通用化改进（见 AGENT.md 反哺协议）
