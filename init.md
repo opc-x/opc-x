@@ -73,9 +73,9 @@ orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
 
 不存在则创建（已存在跳过）：
 ```
-# {PROJECT} — 领域上下文
+# {PROJECT} — 项目知识库
 
-> 永久静态领域知识。跨圈不变。当前圈的运行上下文在战术板 GitHub Issue 里。
+> 静态领域知识，跨圈不变。当前圈的运行上下文在战术板 GitHub Issue 里。
 
 ## 产品描述
 [这个产品是什么，解决什么问题]
