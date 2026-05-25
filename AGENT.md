@@ -1,11 +1,14 @@
 # OPC-X — One-Person Company eXoskeleton
 
+> **opc-x = GitHub 远程仓库 `https://github.com/opc-x/opc-x`**
+> 所有提到「opc-x」「集团」「元项目」均指此仓库。本地项目通过 `@import` 拉取，无需克隆。
+
 **新建项目（唯一入口）：**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash -s -- <项目名>
+curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash
 ```
 
-生成 `.opc/` 结构 + `CLAUDE.md`，用 Claude Code 打开即激活全部集团能力。无需克隆 opc-x，远程自动同步。
+进入项目根目录执行，生成 `.opc/` + `CLAUDE.md` + `/{项目名}` 命令，Claude Code 打开即激活全部集团能力。
 
 ---
 
