@@ -294,6 +294,23 @@ orchestrators/O0X-*/skills/         往部门挂原子技能              新建
 outputs/templates/O0X-{dept}.md     控制部门输出格式              编辑对应模板文件
 ```
 
+**两个扩展点严格 1:1 对应，共 10 对：**
+
+```
+orchestrators/O01-strategy/    ←→   outputs/templates/O01-strategy.md
+orchestrators/O02-research/    ←→   outputs/templates/O02-research.md
+orchestrators/O03-product/     ←→   outputs/templates/O03-product.md
+orchestrators/O04-engineering/ ←→   outputs/templates/O04-engineering.md
+orchestrators/O05-content/     ←→   outputs/templates/O05-content.md
+orchestrators/O06-marketing/   ←→   outputs/templates/O06-marketing.md
+orchestrators/O07-operations/  ←→   outputs/templates/O07-operations.md
+orchestrators/O08-data/        ←→   outputs/templates/O08-data.md
+orchestrators/O09-finance/     ←→   outputs/templates/O09-finance.md
+orchestrators/O10-meta/        ←→   outputs/templates/O10-meta.md
+```
+
+规则：`orchestrators/O0X-{name}/orchestrator.md` 定义「**执行什么**」，`outputs/templates/O0X-{name}.md` 定义「**输出什么格式**」。同一个 `O0X` 前缀，永远绑定在一起。
+
 **扩展点1 — 技能挂载**
 
 在对应部门的 `skills/` 目录新建文件即可。命名：`S{NN}-{kebab-name}.md`。
@@ -303,6 +320,7 @@ outputs/templates/O0X-{dept}.md     控制部门输出格式              编辑
 
 每个部门在 `outputs/templates/O0X-{dept}.md` 有默认输出格式。
 子公司可在 `.opc/outputs/templates/` 下同名文件覆盖集团默认模板。
+覆盖时只改对应 `O0X` 的文件，不要新增或跳号 — 模板数量永远是 10 个。
 
 ---
 

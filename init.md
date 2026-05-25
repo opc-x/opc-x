@@ -13,6 +13,15 @@ orchestrators/O0X-*/skills/           往部门挂原子技能
 outputs/templates/O0X-{dept}.md       控制部门输出格式
 ```
 
+**关键规则：两个扩展点严格 1:1 对应。** 同一个 `O0X` 前缀永远绑定在一起：
+
+```
+orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
+```
+
+`orchestrator.md` = 执行规则（做什么）；`O0X-{name}.md` = 输出格式（输出长什么样）。
+永远 10 对，不多不少，不跳号。
+
 你要在本地项目生成的 `.opc/` 完全镜像这两个扩展点：
 
 ```
