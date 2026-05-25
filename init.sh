@@ -121,7 +121,7 @@ echo "路径: $PROJECT_PATH"
 echo "集团: $RAW_BASE/AGENT.md"
 echo ""
 
-mkdir -p "$PROJECT_PATH/.opc/skills"
+mkdir -p "$PROJECT_PATH/.opc"
 PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
 
 # ── CLAUDE.md ──────────────────────────────────────────────
@@ -132,6 +132,7 @@ cat > "$PROJECT_PATH/CLAUDE.md" << CLAUDEEOF
 ## OPC-X 集团能力（远程实时同步）
 @https://raw.githubusercontent.com/opc-x/opc-x/main/AGENT.md
 @.opc/context.md
+@.opc/skills.md
 
 ## 执行契约
 - 任务开始前：读 \`.opc/project-state.md\`
@@ -189,6 +190,25 @@ cat > "$PROJECT_PATH/.opc/project-state.md" << STATEEOF
 最后更新：$(date +%Y-%m-%d)
 STATEEOF
   echo "✅  .opc/project-state.md"
+fi
+
+# ── .opc/skills.md ─────────────────────────────────────────
+if [ ! -f "$PROJECT_PATH/.opc/skills.md" ]; then
+cat > "$PROJECT_PATH/.opc/skills.md" << SKILLSEOF
+# $PROJECT_NAME — 技能索引
+
+> 任务开始前匹配最相关的技能区域。触发词命中即激活对应知识。
+> 新增技能：在末尾追加 ## [技能名] 触发：关键词 区块，无需新建文件。
+
+---
+
+## [示例技能] 触发：示例/example
+
+在此填写领域知识、关键数字、操作 SOP 等。
+删除此区块，替换为项目实际技能。
+
+SKILLSEOF
+  echo "✅  .opc/skills.md"
 fi
 
 echo ""
