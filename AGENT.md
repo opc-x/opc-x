@@ -457,9 +457,15 @@ gh issue list --label {O0X-name} --state open
 
 **写：仅当有明确 action item**（不在每次激活时自动创建 issue）
 ```bash
+BOARD=$(gh issue list --label strategy-board --state open --json number --jq '.[0].number')
 gh issue create --label {O0X-name} [--label child-issue|master-issue] \
-  --title "[O0X] {描述}" --body "{内容}"
+  --title "[O0X] {描述}" \
+  --body "关联战术板：#{BOARD}
+
+{内容}"
 ```
+
+所有 O0X 任务 Issue 必须在 body 首行写 `关联战术板：#{board_number}`，确保同圈任务都指向同一个战术板。
 
 **安全阀**：人是唯一触发源，orchestrator 不自我触发，不跨部门自动创建 issue。
 
@@ -503,15 +509,37 @@ O0X 产生 action item
 写命令：gh issue edit {N}
 ```
 
-**Agent 操作战术板**：
+**战术板 = 螺旋一圈的 master issue**
+
+每轮螺旋对应一个战术板 Issue，生命周期由指挥官管理：
+
+```
+指挥官开圈
+  → gh issue create --label strategy-board \
+      --title "🗺️ {PROJECT} 战术板 · 第N圈" \
+      --body "{战略目标 + 当前战略 + 作战命令表}"
+
+各部门开任务 → 必须关联当前战术板
+  → issue body 里写：关联战术板：#{board_number}
+
+各部门完成 → 结果写回战术板
+  → gh issue edit {board_number} （追加战略结果）
+
+指挥官关圈
+  → gh issue close {board_number}
+```
+
+**查找当前战术板（不硬编码编号）**：
 
 ```bash
-# 读战术板
-gh issue view $(gh issue list --label strategy-board --json number --jq '.[0].number')
+BOARD=$(gh issue list --label strategy-board --state open \
+  --json number --jq '.[0].number')
+```
 
-# 写回结果
-BOARD=$(gh issue list --label strategy-board --json number --jq '.[0].number')
-gh issue edit $BOARD --body "{新内容}"
+**历史战术板**：
+
+```bash
+gh issue list --label strategy-board --state closed
 ```
 
 **内容结构**（在 GitHub Issue body 里）：
@@ -519,9 +547,8 @@ gh issue edit $BOARD --body "{新内容}"
 ```
 战略目标    ← 指挥官写
 当前战略    ← 指挥官写
-核心域架构  ← 初始化时 Agent 生成，Mermaid 渲染
-作战命令    ← 指挥官写命令，Agent 更新状态
-战略结果    ← Agent 写回，参与部门的战略层面结论
+作战命令    ← 指挥官写，Agent 更新状态
+战略结果    ← Agent 写回（参与部门的战略层面结论）
 ```
 
 ---
