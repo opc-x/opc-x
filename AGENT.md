@@ -90,7 +90,38 @@ graph TB
 
 > 回答「这个公司有什么、谁干什么」。方便人理解和调用。
 
-### 层级结构
+### 全链路层级（集团 → 子公司 → 部门 → 员工 → 执行）
+
+```mermaid
+graph TB
+    OPC["🏢 OPC-X 集团\nAGENT.md — 集团宪法"]
+
+    subgraph SUBS["子公司（每个项目独立）"]
+        SUB_A["📦 TalkFlow\n.opc/project-state.md"]
+        SUB_B["📦 项目 B\n.opc/project-state.md"]
+        SUB_DOT["..."]
+    end
+
+    subgraph DEPTS["10 部门（集团通用）"]
+        direction LR
+        D1["O01 战略"] --- D2["O02 调研"] --- D3["O03 产品"] --- D4["O04 工程"] --- D5["O05 内容"]
+        D6["O06 营销"] --- D7["O07 运营"] --- D8["O08 数据"] --- D9["O09 财务"] --- D10["O10 元认知"]
+    end
+
+    subgraph SKILLS["员工（动态挂载）"]
+        SK["每个部门 × 10 原子技能\norchestrator.md 定义协调规则"]
+    end
+
+    EXEC["⚡ Agent 执行\n最终触达：具体技能 Skill"]
+
+    OPC --> SUBS
+    OPC --> DEPTS
+    DEPTS --> SKILLS
+    SUBS -->|"继承集团部门能力\n+ .opc/skills/ 专项扩展"| SKILLS
+    SKILLS --> EXEC
+```
+
+### 部门内层级
 
 ```mermaid
 graph TB
