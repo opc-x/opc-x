@@ -1,17 +1,11 @@
 # OPC-X — One-Person Company eXoskeleton
 
-**一键安装：**
+**新建项目（唯一入口）：**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash -s -- <项目名>
 ```
 
-**新建项目：**
-```bash
-opc init talkflow              # 在当前目录初始化
-opc init talkflow ~/projects/talkflow  # 指定路径
-```
-
-> 安装后把项目目录丢给任意 AI → 集团能力立即激活。
+生成 `.opc/` 结构 + `CLAUDE.md`，用 Claude Code 打开即激活全部集团能力。无需克隆 opc-x，远程自动同步。
 
 ---
 
