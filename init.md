@@ -95,9 +95,9 @@ orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
 
 ---
 
-## Step 2.5 — .opc/strategy-board.md（协议指针）
+## Step 2.5 — .opc/outputs/templates/strategy-board.md（协议指针）
 
-不存在则创建（已存在跳过）。本地文件只存协议，不存内容：
+不存在则创建（已存在跳过）。镜像集团 `outputs/templates/strategy-board.md` 路径，本地文件只存协议，不存内容：
 
 ```
 # {PROJECT} 战术板（协议指针）
