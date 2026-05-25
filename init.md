@@ -2,6 +2,33 @@
 
 你是一个 OPC-X 集团初始化 Agent。当前工作目录就是要初始化的子公司项目根目录。
 
+## 你需要理解的结构
+
+opc-x（集团，GitHub 远程 `https://github.com/opc-x/opc-x`）有且仅有两个扩展点：
+
+```
+扩展点                                用途
+────────────────────────────────────  ──────────────────────────
+orchestrators/O0X-*/skills/           往部门挂原子技能
+outputs/templates/O0X-{dept}.md       控制部门输出格式
+```
+
+你要在本地项目生成的 `.opc/` 完全镜像这两个扩展点：
+
+```
+.opc/
+├── context.md                        项目领域知识
+├── project-state.md                  螺旋状态
+├── orchestrators/O0X-*/              镜像集团部门，放专项技能
+│   ├── orchestrator.md               专项上下文（覆盖集团通用）
+│   └── skills/                       ← 扩展点1 专项版
+└── outputs/
+    └── templates/                    ← 扩展点2 专项版（覆盖集团默认输出格式）
+        └── O0X-{dept}.md
+```
+
+---
+
 ## Step 0 — 获取项目信息
 
 1. `pwd` → 项目绝对路径
@@ -145,7 +172,37 @@ opc-x/orchestrators/O0X-{name}/
 
 ---
 
-## Step 5 — .claude/commands/{PROJECT}.md
+## Step 5 — .opc/outputs/templates/（扩展点2 专项版）
+
+为每个部门创建输出模板文件，内容继承集团默认，子公司可按需覆盖。
+
+创建 `.opc/outputs/templates/` 目录，生成以下10个文件：
+
+| 文件 | 初始内容 |
+|---|---|
+| `O01-strategy.md` | 继承集团默认（见 opc-x/outputs/templates/O01-strategy.md） |
+| `O02-research.md` | 继承集团默认 |
+| `O03-product.md` | 继承集团默认 |
+| `O04-engineering.md` | 继承集团默认，**如果 context.md 有技术栈则补充验证命令** |
+| `O05-content.md` | 继承集团默认 |
+| `O06-marketing.md` | 继承集团默认 |
+| `O07-operations.md` | 继承集团默认 |
+| `O08-data.md` | 继承集团默认 |
+| `O09-finance.md` | 继承集团默认，**如果 context.md 有定价信息则补充** |
+| `O10-meta.md` | 继承集团默认 |
+
+每个文件格式：
+```
+# O0X·{部门} — {PROJECT} 输出模板
+
+> 继承集团默认模板。在此追加或覆盖 {PROJECT} 专项格式。
+
+{集团默认模板内容}
+```
+
+---
+
+## Step 6 — .claude/commands/{PROJECT}.md
 
 ```
 # /{PROJECT} — 子公司全套能力
@@ -189,7 +246,7 @@ $ARGUMENTS
 
 ---
 
-## Step 6 — 完成输出
+## Step 7 — 完成输出
 
 ```
 ✅ {PROJECT} 子公司初始化完成
@@ -198,8 +255,13 @@ $ARGUMENTS
   CLAUDE.md                              集团能力导入
   .opc/context.md                        填写领域知识
   .opc/project-state.md                  填写 Vision
-  .opc/orchestrators/O01~O10/            镜像集团部门结构
+  .opc/orchestrators/O01~O10/            镜像集团部门（扩展点1：专项技能）
+  .opc/outputs/templates/O01~O10/        镜像集团输出模板（扩展点2：输出格式）
   .claude/commands/{PROJECT}.md          /{PROJECT} 命令可用
+
+扩展方式：
+  专项技能   → .opc/orchestrators/O0X-*/skills/ 新建文件
+  覆盖输出   → .opc/outputs/templates/O0X-{dept}.md 编辑
 
 用法：
   /{PROJECT} <任务>       触发全套子公司能力
