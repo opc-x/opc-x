@@ -103,17 +103,17 @@ fi
 
 # ─────────────────────────────────────────────────────────────
 # 默认：初始化子公司
+#   无参数  → 当前目录就是项目目录，文件夹名作为项目名
+#   有参数  → 在当前目录下创建 <项目名>/ 子目录
 # ─────────────────────────────────────────────────────────────
-PROJECT_NAME="$CMD"
-
-if [ -z "$PROJECT_NAME" ]; then
-  printf "项目名: "
-  read -r PROJECT_NAME
+if [ -z "$CMD" ]; then
+  PROJECT_PATH="$(pwd)"
+  PROJECT_NAME="$(basename "$PROJECT_PATH")"
+else
+  PROJECT_NAME="$CMD"
+  PROJECT_PATH="${2:-$(pwd)/$PROJECT_NAME}"
+  mkdir -p "$PROJECT_PATH"
 fi
-[ -z "$PROJECT_NAME" ] && echo "需要项目名" && exit 1
-
-PROJECT_PATH="${2:-}"
-[ -z "$PROJECT_PATH" ] && PROJECT_PATH="$(pwd)/$PROJECT_NAME"
 
 echo ""
 echo "初始化子公司: $PROJECT_NAME"
@@ -122,6 +122,7 @@ echo "集团: $RAW_BASE/AGENT.md"
 echo ""
 
 mkdir -p "$PROJECT_PATH/.opc/skills"
+PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
 
 # ── CLAUDE.md ──────────────────────────────────────────────
 if [ ! -f "$PROJECT_PATH/CLAUDE.md" ]; then
