@@ -56,7 +56,7 @@ graph TB
     U(["👤 你"])
 
     subgraph ONCE["一次性操作"]
-        UC1["新建专项\n./new-subsidiary.sh"]
+        UC1["新建专项\ncurl init.sh | bash"]
     end
 
     subgraph DAILY["日常操作（随时）"]
@@ -122,7 +122,7 @@ graph TB
     OPC --> SUBS
     OPC --> DEPTS
     DEPTS --> SKILLS
-    SUBS -->|"继承集团部门能力\n+ .opc/skills/ 专项扩展"| SKILLS
+    SUBS -->|"继承集团部门能力\n+ .opc/skills.md 专项扩展"| SKILLS
     SKILLS --> EXEC
 ```
 
@@ -282,18 +282,63 @@ OPC-X 螺旋运行在它之上，不干涉它。
 
 ## 子公司接入协议
 
-新项目运行：`./new-subsidiary.sh <项目名> <项目路径>`
+### Step 1 — 初始化 scaffold
+
+```bash
+# 在已有项目目录里（推荐）
+cd my-project
+curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash
+
+# 或新建项目
+curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash -s -- <项目名>
+```
 
 生成结构：
 ```
 project/
-├── CLAUDE.md          ← @OPC-X/AGENT.md + @.opc/context.md
-├── .opc/
-│   ├── context.md        ← 该项目的领域知识
-│   ├── project-state.md  ← 该项目的螺旋状态
-│   └── skills/           ← 项目专项技能（覆盖/扩展集团技能）
+├── CLAUDE.md              ← @AGENT.md + @.opc/context.md + @.opc/skills.md
+└── .opc/
+    ├── context.md          ← 填：产品描述/用户/技术栈/定价/阶段
+    ├── project-state.md    ← 填：Vision + 当前螺旋状态
+    └── skills.md           ← AI生成：项目专属技能索引（见 Step 2）
 ```
+
+### Step 2 — 生成 skills.md（技能说明书）
+
+> 填好 `context.md` 后，让 AI 自动生成 `skills.md`。集团侧能力，无需手写。
+
+**触发方式**：对 AI 说「根据 context.md 生成 skills.md」，或直接：
+
+```
+/opc-skills-gen
+```
+
+**AI 执行协议**：
+1. 读 `.opc/context.md`（产品领域、技术栈、用户、商业模式）
+2. 识别该项目的关键技能域（通常5-10个）
+3. 每个技能域生成：`## [技能名] 触发：关键词1/关键词2/...`
+4. 填入领域知识：核心算法、关键文件、数字指标、操作 SOP
+5. 写入 `.opc/skills.md`，末尾保留「新增技能」说明
+
+**skills.md 格式规范**：
+```markdown
+# {项目名} — 技能索引
+
+## [技能名] 触发：关键词/关键词/关键词
+
+{领域知识：核心逻辑、关键文件、重要数字、操作步骤}
+
+---
+## 新增技能
+在末尾追加新区块，无需新建文件。
+```
+
+### 后续维护
+
+- **更新技能**：直接编辑 `.opc/skills.md` 对应区块
+- **新增技能**：末尾追加 `## [技能名] 触发：...` 区块
+- **技能回流**：专项技能发现通用价值 → `/opc-audit` → 确认 → 迁移到 `opc-x/orchestrators/`
 
 ---
 
-*OPC-X v2.1 · 两视角分离 · 集团能力通用 · 子公司状态独立 · 终身复用。*
+*OPC-X v2.2 · 两视角分离 · 集团能力通用 · 子公司状态独立 · 终身复用。*
