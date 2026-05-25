@@ -29,13 +29,13 @@ curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash
 ```
 
 **三层职责边界**：
-- `context.md` → 永久领域知识，跨圈不变（产品/用户/技术栈）
-- `project-state.md` → 螺旋计数，记录在第几圈
-- 战术板 Issue → 本圈一切：决策、命令、执行进度、结果，全部积累在这里
+- `context.md` → 项目知识库，静态领域知识（产品/用户/技术栈），跨圈不变
+- `project-state.md` → 螺旋记忆，维护整条螺旋的运行信息（每圈成果积累、当前位置、下圈方向）
+- 战术板 Issue → 本圈命令面板，open 期间持续积累本圈决策/执行/结果
 
 **战术板 Issue 生命周期 = 螺旋一圈的生命周期**：
-- Issue open → 本圈进行中，持续积累上下文
-- Issue close → 本圈归档，project-state.md +1 圈，开新 Issue 进入下一圈
+- Issue open → 本圈进行中，所有上下文积累在 Issue 里
+- Issue close → 本圈归档，O10 将本圈成果写回 project-state.md，开新 Issue 进入下一圈
 
 Agent 执行时：读契约层（理解规则）→ 读战术板 Issue（本圈上下文）→ 执行 → 写回战术板 Issue。
 
@@ -71,8 +71,8 @@ OPC-X 同时承载两层语义，两种说法指向同一个东西：
 | 员工 / 岗位 | Skill | 原子执行单元，动态增删 |
 | 运营节律 | 螺旋协议 | 全公司工作节奏，凌驾于部门之上 |
 | 一轮工作 | 螺旋一圈 | 决策→需求→执行→验收→反馈 |
-| 靶心 / 目标 | Vision | `project-state.md` 里的终极目标（契约层）|
-| 项目进度 | `project-state.md` | 螺旋记忆，契约层，每轮读写 |
+| 项目知识库 | `context.md` | 静态领域知识，跨圈不变（产品/用户/技术栈）|
+| 螺旋记忆 | `project-state.md` | 整条螺旋的运行信息，每圈结束写入成果，下圈开始读取 |
 | 战术板 | GitHub Issue · `strategy-board` label | 输出层，指挥官作战面板 = 本圈运行上下文 |
 | 部门任务队列 | GitHub Issues · `O0X` label | 输出层，各部门持久化工作记忆 |
 | CEO 办公室 | O10 · 元认知 | 复盘 / 审计 / 系统迭代 |
