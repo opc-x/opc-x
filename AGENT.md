@@ -448,6 +448,30 @@ O06 营销就绪   → 等待 O04 产品可用（依赖，不提前执行）
 | `O09-finance` | `#0E8A16` | 财务 | ❌ |
 | `O10-meta` | `#CCCCCC` | 元认知 | ❌ |
 
+### 对话意图 → 自动开单协议
+
+指挥官的每一句对话，Agent 自动判断是否需要在对应部门开 Issue：
+
+```
+指挥官输入
+  ↓
+意图分析 → 匹配路由表 → 确定 O0X 部门
+  ↓
+判断开单条件（满足任一即开）：
+  · 需要 Cursor 执行代码（O04 / O05文档 / O08SQL）
+  · 任务超过当前 session，需要持续追踪
+  · 涉及多个部门协作
+  · 指挥官明确说「开单」「记下来」「派出去」
+  ↓
+YES → 自动创建 O0X Issue，关联当前战术板
+NO  → session 内直接执行，不开 Issue（快速问答/分析/建议）
+```
+
+**不开单的典型场景**：问问题、看分析、聊战略、快速决策
+**必须开单的典型场景**：改代码、写文档、跑数据、执行营销任务
+
+---
+
 ### 核心规则
 
 **读：永远自动**（orchestrator 激活时执行，无副作用）
@@ -455,7 +479,7 @@ O06 营销就绪   → 等待 O04 产品可用（依赖，不提前执行）
 gh issue list --label {O0X-name} --state open
 ```
 
-**写：仅当有明确 action item**（不在每次激活时自动创建 issue）
+**写：满足开单条件时自动执行**
 ```bash
 BOARD=$(gh issue list --label strategy-board --state open --json number --jq '.[0].number')
 gh issue create --label {O0X-name} [--label child-issue|master-issue] \
