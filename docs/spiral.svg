@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 620">
+  <defs>
+    <radialGradient id="gold-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="arr-red" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0,0 7,3.5 0,7" fill="#ef4444"/>
+    </marker>
+    <marker id="arr-gold" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0,0 7,3.5 0,7" fill="#fbbf24"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="620" fill="#080808"/>
+
+  <!-- Title -->
+  <text x="250" y="27" text-anchor="middle" fill="#ffffff" font-size="13"
+        font-family="monospace" font-weight="bold" letter-spacing="2">OPC-X · 螺旋执行协议</text>
+
+  <!-- ── Bullseye ── -->
+  <circle cx="250" cy="68" r="44" fill="url(#gold-glow)"/>
+  <circle cx="250" cy="68" r="22" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.85"/>
+  <circle cx="250" cy="68" r="13" fill="none" stroke="#fbbf24" stroke-width="2"/>
+  <circle cx="250" cy="68" r="5"  fill="#fbbf24"/>
+  <text x="250" y="50" text-anchor="middle" fill="#fbbf24" font-size="10" font-family="monospace">靶心 Vision</text>
+
+  <!-- ══════════════════════════════════
+       SPIRAL JUMP CONNECTORS  (behind nodes)
+       ══════════════════════════════════ -->
+
+  <!-- Ring3 反馈 (168,179) → Bullseye (250,90) -->
+  <path d="M168,179 C192,142 226,104 250,90"
+        stroke="#fbbf24" stroke-width="1.5" fill="none"
+        stroke-dasharray="6,3" marker-end="url(#arr-gold)" opacity="0.75"/>
+
+  <!-- Ring2 反馈 (141,302) → Ring3 决策 (250,165) -->
+  <path d="M141,302 C163,253 207,198 250,167"
+        stroke="#ef4444" stroke-width="1.8" fill="none"
+        stroke-dasharray="6,3" marker-end="url(#arr-red)"/>
+  <text x="163" y="229" fill="#ef4444" font-size="9" font-family="monospace"
+        transform="rotate(-50,163,229)">+1圈 ⬆</text>
+
+  <!-- Ring1 反馈 (109,450) → Ring2 决策 (250,284) -->
+  <path d="M109,450 C138,377 191,318 250,286"
+        stroke="#ef4444" stroke-width="1.8" fill="none"
+        stroke-dasharray="6,3" marker-end="url(#arr-red)"/>
+  <text x="153" y="368" fill="#ef4444" font-size="9" font-family="monospace"
+        transform="rotate(-50,153,368)">+1圈 ⬆</text>
+
+  <!-- ══════════════════════════════════
+       RING 3  cy=185  rx=86  ry=20
+       决策(250,165) 需求(332,179) 执行(301,201) 验收(199,201) 反馈(168,179)
+       ══════════════════════════════════ -->
+  <ellipse cx="250" cy="185" rx="86" ry="20" fill="none" stroke="#555" stroke-width="1.2"/>
+  <text x="46" y="188" text-anchor="middle" fill="#555" font-size="9" font-family="monospace">第N圈</text>
+
+  <!-- Ring3 seq links -->
+  <line x1="250" y1="165" x2="332" y2="179" stroke="#555" stroke-width="0.8"/>
+  <line x1="332" y1="179" x2="301" y2="201" stroke="#555" stroke-width="0.8"/>
+  <line x1="301" y1="201" x2="199" y2="201" stroke="#555" stroke-width="0.8"/>
+  <line x1="199" y1="201" x2="168" y2="179" stroke="#555" stroke-width="0.8"/>
+
+  <!-- Ring3 nodes -->
+  <circle cx="250" cy="165" r="16" fill="#ef4444"/>
+  <text x="250" y="162" text-anchor="middle" fill="white" font-size="8" font-family="monospace" font-weight="bold">决策</text>
+  <text x="250" y="172" text-anchor="middle" fill="white" font-size="7" font-family="monospace">O01</text>
+
+  <circle cx="332" cy="179" r="16" fill="#f97316"/>
+  <text x="332" y="176" text-anchor="middle" fill="white" font-size="8" font-family="monospace" font-weight="bold">需求</text>
+  <text x="332" y="186" text-anchor="middle" fill="white" font-size="7" font-family="monospace">O03</text>
+
+  <circle cx="301" cy="201" r="16" fill="#22c55e"/>
+  <text x="301" y="198" text-anchor="middle" fill="white" font-size="8" font-family="monospace" font-weight="bold">执行</text>
+  <text x="301" y="208" text-anchor="middle" fill="white" font-size="7" font-family="monospace">04-07</text>
+
+  <circle cx="199" cy="201" r="16" fill="#3b82f6"/>
+  <text x="199" y="198" text-anchor="middle" fill="white" font-size="8" font-family="monospace" font-weight="bold">验收</text>
+  <text x="199" y="208" text-anchor="middle" fill="white" font-size="7" font-family="monospace">O08</text>
+
+  <circle cx="168" cy="179" r="16" fill="#a855f7"/>
+  <text x="168" y="176" text-anchor="middle" fill="white" font-size="8" font-family="monospace" font-weight="bold">反馈</text>
+  <text x="168" y="186" text-anchor="middle" fill="white" font-size="7" font-family="monospace">O10</text>
+
+  <!-- ══════════════════════════════════
+       RING 2  cy=310  rx=115  ry=26
+       决策(250,284) 需求(359,302) 执行(318,331) 验收(182,331) 反馈(141,302)
+       ══════════════════════════════════ -->
+  <ellipse cx="250" cy="310" rx="115" ry="26" fill="none" stroke="#555" stroke-width="1.2"/>
+  <text x="46" y="313" text-anchor="middle" fill="#555" font-size="9" font-family="monospace">第2圈</text>
+
+  <!-- Ring2 seq links -->
+  <line x1="250" y1="284" x2="359" y2="302" stroke="#555" stroke-width="0.8"/>
+  <line x1="359" y1="302" x2="318" y2="331" stroke="#555" stroke-width="0.8"/>
+  <line x1="318" y1="331" x2="182" y2="331" stroke="#555" stroke-width="0.8"/>
+  <line x1="182" y1="331" x2="141" y2="302" stroke="#555" stroke-width="0.8"/>
+
+  <!-- Ring2 nodes -->
+  <circle cx="250" cy="284" r="18" fill="#ef4444"/>
+  <text x="250" y="281" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">决策</text>
+  <text x="250" y="291" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O01</text>
+
+  <circle cx="359" cy="302" r="18" fill="#f97316"/>
+  <text x="359" y="299" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">需求</text>
+  <text x="359" y="309" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O03</text>
+
+  <circle cx="318" cy="331" r="18" fill="#22c55e"/>
+  <text x="318" y="328" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">执行</text>
+  <text x="318" y="338" text-anchor="middle" fill="white" font-size="7" font-family="monospace">04-07</text>
+
+  <circle cx="182" cy="331" r="18" fill="#3b82f6"/>
+  <text x="182" y="328" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">验收</text>
+  <text x="182" y="338" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O08</text>
+
+  <circle cx="141" cy="302" r="18" fill="#a855f7"/>
+  <text x="141" y="299" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">反馈</text>
+  <text x="141" y="309" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O10</text>
+
+  <!-- ══════════════════════════════════
+       RING 1  cy=460  rx=148  ry=33
+       决策(250,427) 需求(391,450) 执行(337,487) 验收(163,487) 反馈(109,450)
+       ══════════════════════════════════ -->
+  <ellipse cx="250" cy="460" rx="148" ry="33" fill="none" stroke="#555" stroke-width="1.2"/>
+  <text x="46" y="463" text-anchor="middle" fill="#555" font-size="9" font-family="monospace">第1圈</text>
+
+  <!-- Ring1 seq links -->
+  <line x1="250" y1="427" x2="391" y2="450" stroke="#555" stroke-width="0.8"/>
+  <line x1="391" y1="450" x2="337" y2="487" stroke="#555" stroke-width="0.8"/>
+  <line x1="337" y1="487" x2="163" y2="487" stroke="#555" stroke-width="0.8"/>
+  <line x1="163" y1="487" x2="109" y2="450" stroke="#555" stroke-width="0.8"/>
+
+  <!-- Ring1 nodes -->
+  <circle cx="250" cy="427" r="20" fill="#ef4444"/>
+  <text x="250" y="424" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">决策</text>
+  <text x="250" y="434" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O01</text>
+
+  <circle cx="391" cy="450" r="20" fill="#f97316"/>
+  <text x="391" y="447" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">需求</text>
+  <text x="391" y="457" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O03</text>
+
+  <circle cx="337" cy="487" r="20" fill="#22c55e"/>
+  <text x="337" y="484" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">执行</text>
+  <text x="337" y="494" text-anchor="middle" fill="white" font-size="7" font-family="monospace">04-07</text>
+
+  <circle cx="163" cy="487" r="20" fill="#3b82f6"/>
+  <text x="163" y="484" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">验收</text>
+  <text x="163" y="494" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O08</text>
+
+  <circle cx="109" cy="450" r="20" fill="#a855f7"/>
+  <text x="109" y="447" text-anchor="middle" fill="white" font-size="9" font-family="monospace" font-weight="bold">反馈</text>
+  <text x="109" y="457" text-anchor="middle" fill="white" font-size="8" font-family="monospace">O10</text>
+
+  <!-- ── Legend ── -->
+  <rect x="18" y="526" width="464" height="76" rx="5" fill="#111" stroke="#2a2a2a" stroke-width="1"/>
+
+  <line x1="33" y1="543" x2="72" y2="543" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="78" y="547" fill="#999" font-size="9" font-family="monospace">螺旋跃升 +1圈</text>
+
+  <line x1="220" y1="543" x2="259" y2="543" stroke="#555" stroke-width="0.8"/>
+  <text x="265" y="547" fill="#999" font-size="9" font-family="monospace">轮内执行链</text>
+
+  <circle cx="33"  cy="565" r="5" fill="#ef4444"/>
+  <text x="43"  y="569" fill="#ccc" font-size="9" font-family="monospace">决策 O01</text>
+
+  <circle cx="113" cy="565" r="5" fill="#f97316"/>
+  <text x="123" y="569" fill="#ccc" font-size="9" font-family="monospace">需求 O03</text>
+
+  <circle cx="193" cy="565" r="5" fill="#22c55e"/>
+  <text x="203" y="569" fill="#ccc" font-size="9" font-family="monospace">执行 O04-07</text>
+
+  <circle cx="297" cy="565" r="5" fill="#3b82f6"/>
+  <text x="307" y="569" fill="#ccc" font-size="9" font-family="monospace">验收 O08</text>
+
+  <circle cx="377" cy="565" r="5" fill="#a855f7"/>
+  <text x="387" y="569" fill="#ccc" font-size="9" font-family="monospace">反馈 O10</text>
+
+  <circle cx="448" cy="565" r="5" fill="#fbbf24"/>
+  <text x="430" y="569" fill="#ccc" font-size="9" font-family="monospace"/>
+
+  <text x="250" y="591" text-anchor="middle" fill="#3a3a3a" font-size="8" font-family="monospace">每圈仅做加法 · 螺旋上升 · 直至命中靶心</text>
+</svg>
