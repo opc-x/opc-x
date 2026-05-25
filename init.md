@@ -55,12 +55,12 @@ orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
 ## OPC-X 集团能力（远程实时同步）
 @https://raw.githubusercontent.com/opc-x/opc-x/main/AGENT.md
 @.opc/context.md
-@.opc/strategy-board.md
 
 ## 执行契约
-- 任务开始前：读 `.opc/project-state.md` + `.opc/strategy-board.md`
-- 任务结束后：判断是否更新 `.opc/project-state.md`
-- 重大决策后：更新 `.opc/strategy-board.md` 决策历史
+- 契约层（只读）：opc-x AGENT.md + .opc/ 本地文件
+- 输出层（读写）：GitHub Issues（战术板 + 部门队列）
+- 任务开始前：读 `.opc/project-state.md` + 读 GitHub 战术板
+- 任务结束后：结果写回 GitHub 战术板 / 部门 Issue，判断是否更新 `.opc/project-state.md`
 ```
 
 **已存在** → 检查顶部有没有 `@https://raw.githubusercontent.com/opc-x/opc-x/main/AGENT.md`，没有则插入到文件最顶部。
@@ -326,9 +326,9 @@ gh issue create --label strategy-board \
 你现在以 **{PROJECT} 子公司模式**运行。
 
 **激活时必读（按顺序）：**
-1. `.opc/strategy-board.md` — 战术板（指挥官命令在这里）
-2. `.opc/project-state.md` — 螺旋状态
-3. 集团 AGENT.md 跨部门级联协议已加载
+1. GitHub 战术板：`gh issue list --label strategy-board --json number,body --jq '.[0]'`
+2. `.opc/project-state.md` — 螺旋状态（契约层）
+3. 集团 AGENT.md 跨部门级联协议已加载（契约层）
 
 ## 任务
 
@@ -339,8 +339,8 @@ $ARGUMENTS
 ```
 有 $ARGUMENTS？
   YES → 按意图路由到对应部门执行
-  NO  → 读战术板「命令队列」→ 找状态=待执行的命令 → 执行
-        → 找不到 → 读战术板「战略目标/当前战略」→ 输出全局状态分析
+  NO  → 读 GitHub 战术板「作战命令」→ 找状态=待执行 → 执行
+        → 找不到 → 输出战术板全局状态分析
 ```
 
 ## 路由规则
@@ -355,15 +355,15 @@ $ARGUMENTS
 [O0X·{部门} → {技能}]
 {执行结果}
 ---
-战术板写回：{命令#N 状态改为「完成」，结果：{一句话}}
+战术板写回：gh issue edit {N} — 命令#X 状态→完成，追加战略结果
 级联触发：{下一棒部门 / 无}
 回流候选：{通用模式 / 无}
 
 ## 执行后（必须做）
 
-1. 把结果写回 `.opc/strategy-board.md` 命令队列对应行
-2. 判断是否触发级联 → 触发则继续执行，不等用户开口
-3. 本圈全部完成 → O10 填写「战略结果」区 + 更新 project-state.md
+1. 结果写回 GitHub 战术板 Issue（`gh issue edit`，不改本地文件）
+2. 判断是否触发级联 → 触发则继续执行，不等指挥官开口
+3. 本圈全部完成 → O10 在战术板写入「战略结果」+ 更新 `.opc/project-state.md`
 
 ## 特殊命令
 

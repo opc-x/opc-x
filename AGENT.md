@@ -12,6 +12,24 @@ curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash
 
 ---
 
+## 系统层次（最高优先级，优先读）
+
+```
+层次          位置                          职责                    读/写
+──────────    ──────────────────────────    ────────────────────    ──────
+契约层·集团   opc-x（GitHub 远程）          组织章程·规则·协议       只读
+契约层·子公司 {project}/.opc/（本地）       专项规则·上下文·指针     只读
+输出层        GitHub Issues                 所有运营输出             读写
+  ├── 战术板  label: strategy-board         指挥官作战面板（唯一）
+  └── 任务队  label: O0X-{dept}             各部门持久化工作记忆
+```
+
+**核心原则：契约层只存规则，不存内容。所有内容输出到 GitHub Issues。**
+
+Agent 执行时：读契约层（理解规则）→ 读/写输出层（执行任务）→ 结果留在 GitHub Issues。
+
+---
+
 ## 语义定义（消歧义，优先读）
 
 OPC-X 同时承载两层语义，两种说法指向同一个东西：
@@ -42,11 +60,11 @@ OPC-X 同时承载两层语义，两种说法指向同一个东西：
 | 员工 / 岗位 | Skill | 原子执行单元，动态增删 |
 | 运营节律 | 螺旋协议 | 全公司工作节奏，凌驾于部门之上 |
 | 一轮工作 | 螺旋一圈 | 决策→需求→执行→验收→反馈 |
-| 靶心 / 目标 | Vision | `project-state.md` 里的终极目标 |
-| 项目进度 | `project-state.md` | 螺旋记忆，每轮任务前读、后写 |
-| 全局战略仪表盘 | `strategy-board.md` | 跨部门综合视图，上帝视角，O10 维护 |
-| 部门任务队列 | GitHub Issues + O0X Label | 每个部门的持久化工作记忆 |
-| CEO 办公室 | O10 · 元认知 | 复盘 / 审计 / 系统迭代 / strategy-board 维护 |
+| 靶心 / 目标 | Vision | `project-state.md` 里的终极目标（契约层）|
+| 项目进度 | `project-state.md` | 螺旋记忆，契约层，每轮读写 |
+| 战术板 | GitHub Issue · `strategy-board` label | 输出层，指挥官唯一作战面板 |
+| 部门任务队列 | GitHub Issues · `O0X` label | 输出层，各部门持久化工作记忆 |
+| CEO 办公室 | O10 · 元认知 | 复盘 / 审计 / 系统迭代 |
 | 招聘 | 新建技能文件 | 按需增加岗位能力 |
 | 离职 | 删除技能文件 | 淘汰过时岗位 |
 | 调岗 | 技能回流 | 专项技能 → 元项目，需人确认 |
@@ -466,40 +484,44 @@ O0X 产生 action item
 
 ---
 
-## strategy-board.md（战术板）
+## 战术板（GitHub Issue）
 
-每个子公司 `.opc/strategy-board.md`：指挥官唯一的输入输出界面。
+战术板是**输出层**，不是契约层。它活在 GitHub Issues 上，不在本地文件里。
 
-**结构**：战略目标 / 当前战略 / 核心域架构 / 作战命令 / 战略结果
+**位置**：GitHub Issue · label `strategy-board` · 每个项目唯一一个
+**标题**：`🗺️ {PROJECT} 战术板`
+**指挥官在这里**：写命令、看结果，Mermaid 图在这里渲染
 
-**维护规则**：
-- 指挥官写：战略目标 / 当前战略 / 作战命令
-- 系统写回：战略结果（命令完成后，参与部门汇总战略层面结论）
-- `/talkflow` 激活时自动读取
+**`.opc/strategy-board.md` 的正确定位**：指针文件，只存 Issue 地址，不存内容。
 
-**模板位置**：`opc-x/outputs/templates/strategy-board.md`
+```markdown
+# {PROJECT} 战术板
 
-### GitHub Issue 镜像规则
+战术板位置：{GitHub Issue URL}
 
-战术板同步到 GitHub Issue，利用 GitHub 原生渲染 Mermaid 图表。
+读板：gh issue view {N}
+写命令：gh issue edit {N}
+```
 
-**Label**：`strategy-board`（每个项目唯一，固定不变）
-**Issue**：每个项目只有一个，标题固定为 `🗺️ {PROJECT} 战术板`
-**同步时机**：
-- 战术板有任何内容变更后同步
-- 作战命令新增 / 状态变更后同步
-- 战略结果写回后同步
+**Agent 操作战术板**：
 
-**同步命令**：
 ```bash
-# 首次创建
-gh issue create --label strategy-board \
-  --title "🗺️ {PROJECT} 战术板" \
-  --body "$(cat .opc/strategy-board.md)"
+# 读战术板
+gh issue view $(gh issue list --label strategy-board --json number --jq '.[0].number')
 
-# 后续更新（先查 issue number，再编辑）
-BOARD_ISSUE=$(gh issue list --label strategy-board --json number --jq '.[0].number')
-gh issue edit $BOARD_ISSUE --body "$(cat .opc/strategy-board.md)"
+# 写回结果
+BOARD=$(gh issue list --label strategy-board --json number --jq '.[0].number')
+gh issue edit $BOARD --body "{新内容}"
+```
+
+**内容结构**（在 GitHub Issue body 里）：
+
+```
+战略目标    ← 指挥官写
+当前战略    ← 指挥官写
+核心域架构  ← 初始化时 Agent 生成，Mermaid 渲染
+作战命令    ← 指挥官写命令，Agent 更新状态
+战略结果    ← Agent 写回，参与部门的战略层面结论
 ```
 
 ---
