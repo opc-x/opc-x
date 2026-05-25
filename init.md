@@ -91,71 +91,38 @@ orchestrators/O0X-{name}/  ←→  outputs/templates/O0X-{name}.md
 
 ---
 
-## Step 2.5 — .opc/strategy-board.md
+## Step 2.5 — .opc/strategy-board.md（协议指针）
 
-不存在则创建（已存在跳过）。读取 context.md 中的产品描述和当前阶段，填入对应字段：
+不存在则创建（已存在跳过）。本地文件只存协议，不存内容：
 
 ```
-# {PROJECT} 战略作战室
+# {PROJECT} 战术板（协议指针）
 
-> O10 元认知 owns 此文件维护权。每轮螺旋复盘后更新。
+战术板活在 GitHub Issues，每轮螺旋一个，指挥官管生命周期。
 
----
+## 操作
 
-## 北极星
+​```bash
+# 找当前战术板
+gh issue list --label strategy-board --state open --limit 1
 
-[从 context.md 当前阶段推断，或留空待填]
+# 新开一圈
+gh issue create --label strategy-board \
+  --title "🗺️ {PROJECT} 战术板 · 第N圈" \
+  --body "..."
 
----
+# 查历史
+gh issue list --label strategy-board --state closed
+​```
+```
 
-## 螺旋位置
+如果有 GitHub remote，同步创建第 1 圈战术板 Issue（使用集团模板 `opc-x/outputs/templates/strategy-board.md` 作为 body）：
 
-**当前圈**：第 1 圈
-**阶段**：决策 ⬅ 当前在这里
-**本圈核心目标**：[待填]
-
----
-
-## 各部门信号灯
-
-| 部门 | 状态 | Open Issues | 当前焦点 | 阻断 |
-|------|------|------------|---------|------|
-| O01 战略 | 🟢 | 0 | 初始化 | — |
-| O02 调研 | 🟢 | 0 | — | — |
-| O03 产品 | 🟢 | 0 | — | — |
-| O04 工程 | 🟢 | 0 | — | — |
-| O05 内容 | 🟢 | 0 | — | — |
-| O06 营销 | 🟢 | 0 | — | — |
-| O07 运营 | 🟢 | 0 | — | — |
-| O08 数据 | 🟢 | 0 | — | — |
-| O09 财务 | 🟢 | 0 | — | — |
-| O10 元认知 | 🟢 | 0 | — | — |
-
----
-
-## 跨部门阻断关系
-
-暂无。
-
----
-
-## 当前战略决策待办
-
-| 优先级 | 决策问题 | 所需信息 | 负责部门 |
-|--------|---------|---------|---------|
-| P0 | 本圈核心目标确认 | — | O01 |
-
----
-
-## 决策历史
-
-| 日期 | 决策 | 依据 | 影响 |
-|------|------|------|------|
-| {TODAY} | 项目初始化，进入第1圈 | — | 全部门 |
-
----
-
-*更新规则：每轮 O10 复盘后刷新信号灯 + 追加决策记录。*
+```bash
+TEMPLATE=$(curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/outputs/templates/strategy-board.md)
+gh issue create --label strategy-board \
+  --title "🗺️ {PROJECT} 战术板 · 第1圈" \
+  --body "$TEMPLATE"
 ```
 
 ---
