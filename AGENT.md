@@ -15,18 +15,29 @@ curl -fsSL https://raw.githubusercontent.com/opc-x/opc-x/main/init.sh | bash
 ## 系统层次（最高优先级，优先读）
 
 ```
-层次          位置                          职责                    读/写
-──────────    ──────────────────────────    ────────────────────    ──────
-契约层·集团   opc-x（GitHub 远程）          组织章程·规则·协议       只读
-契约层·子公司 {project}/.opc/（本地）       专项规则·上下文·指针     只读
-输出层        GitHub Issues                 所有运营输出             读写
-  ├── 战术板  label: strategy-board         指挥官作战面板（唯一）
-  └── 任务队  label: O0X-{dept}             各部门持久化工作记忆
+层次          位置                          职责                              读/写
+──────────    ──────────────────────────    ──────────────────────────────    ──────
+契约层·集团   opc-x（GitHub 远程）          组织章程·规则·协议·模板            只读
+契约层·子公司 {project}/.opc/（本地）       专项规则·领域知识·指针             只读
+  ├── context.md                           永久静态领域知识，跨圈不变
+  ├── project-state.md                     螺旋计数器（在第几圈）
+  └── strategy-board.md                    协议指针（指向 GitHub Issue）
+输出层        GitHub Issues                 所有运营内容，持续积累              读写
+  ├── 战术板  label: strategy-board         本圈运行上下文 + 命令面板
+  │           open=圈进行中  close=圈归档·螺旋+1
+  └── 任务队  label: O0X-{dept}             各部门任务，关联当前战术板
 ```
 
-**核心原则：契约层只存规则，不存内容。所有内容输出到 GitHub Issues。**
+**三层职责边界**：
+- `context.md` → 永久领域知识，跨圈不变（产品/用户/技术栈）
+- `project-state.md` → 螺旋计数，记录在第几圈
+- 战术板 Issue → 本圈一切：决策、命令、执行进度、结果，全部积累在这里
 
-Agent 执行时：读契约层（理解规则）→ 读/写输出层（执行任务）→ 结果留在 GitHub Issues。
+**战术板 Issue 生命周期 = 螺旋一圈的生命周期**：
+- Issue open → 本圈进行中，持续积累上下文
+- Issue close → 本圈归档，project-state.md +1 圈，开新 Issue 进入下一圈
+
+Agent 执行时：读契约层（理解规则）→ 读战术板 Issue（本圈上下文）→ 执行 → 写回战术板 Issue。
 
 ---
 
@@ -62,7 +73,7 @@ OPC-X 同时承载两层语义，两种说法指向同一个东西：
 | 一轮工作 | 螺旋一圈 | 决策→需求→执行→验收→反馈 |
 | 靶心 / 目标 | Vision | `project-state.md` 里的终极目标（契约层）|
 | 项目进度 | `project-state.md` | 螺旋记忆，契约层，每轮读写 |
-| 战术板 | GitHub Issue · `strategy-board` label | 输出层，指挥官唯一作战面板 |
+| 战术板 | GitHub Issue · `strategy-board` label | 输出层，指挥官作战面板 = 本圈运行上下文 |
 | 部门任务队列 | GitHub Issues · `O0X` label | 输出层，各部门持久化工作记忆 |
 | CEO 办公室 | O10 · 元认知 | 复盘 / 审计 / 系统迭代 |
 | 招聘 | 新建技能文件 | 按需增加岗位能力 |
