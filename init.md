@@ -272,13 +272,6 @@ gh label create "O10-meta"        --color "CCCCCC" --description "元认知任�
 gh label create "strategy-board"  --color "0075CA" --description "战术板 - 指挥官作战面板（每项目唯一）" --force
 ```
 
-创建战术板 GitHub Issue（每项目唯一，Mermaid 渲染用）：
-```bash
-gh issue create --label strategy-board \
-  --title "🗺️ {PROJECT} 战术板" \
-  --body "$(cat .opc/strategy-board.md)"
-```
-
 如果没有 GitHub remote，跳过此步，提示用户后续手动执行或在连接 GitHub 后运行。
 
 ---
