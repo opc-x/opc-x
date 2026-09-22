@@ -1,7 +1,7 @@
-# OPC-X — One-Person Company eXoskeleton
+# OPC-X — AI Exoskeleton for Indie Hackers
 
-一人公司的 AI 外骨骼。10 个部门，100 个原子技能，一套螺旋执行协议。
-丢给任意 AI，集团能力立即激活。
+独立开发者的 AI 外骨骼。10 个部门，100 个原子技能，一套螺旋执行协议。
+丢给任意 AI，整套能力立即激活。
 
 ## 新建项目
 

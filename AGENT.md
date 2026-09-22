@@ -1,4 +1,4 @@
-# OPC-X — One-Person Company eXoskeleton
+# OPC-X — AI Exoskeleton for Indie Hackers
 
 > **opc-x = GitHub 远程仓库 `https://github.com/opc-x/opc-x`**
 > 所有提到「opc-x」「集团」「元项目」均指此仓库。本地项目通过 `@import` 拉取，无需克隆。
