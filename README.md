@@ -1,4 +1,4 @@
-### Hi, I'm Michael.
+### Hi, I'm Michael C.
 
 13 years building backend systems where bugs cost real money — distributed scheduling, search, crypto wallets, and licensed payment rails (`Java` · `Spring Boot` · `MySQL` · `Redis` · `Kafka`).
 
